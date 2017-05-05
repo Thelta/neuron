@@ -3,7 +3,7 @@ import os
 from PIL import Image
 import numpy as np
 
-#gets directory
+#gets images from directory and returns images as numpy array, associated classes and all of the classes
 def get_images_as_inputs(directory, input_count):
     images = os.listdir(directory)
 
@@ -28,29 +28,6 @@ def get_images_as_inputs(directory, input_count):
 
     return _inputs, outputs, classes
 
-def save_images_as_inputs(directory, input_count):
-    images = os.listdir(directory)
-
-    total_classes = 0
-    classes = dict()
-
-    _inputs = []
-    outputs = []
-
-    #get filenames
-    for filename in images:
-        class_name = filename.split(" ")[0]
-
-        if class_name not in classes:
-            classes[class_name] = total_classes
-            total_classes += 1
-
-        outputs.append(classes[class_name])
-        file_dir = os.path.join(directory, filename)
-        imfile = Image.fromarray(read_as_bw(file_dir, input_count))
-        imfile.save("../{}".format(filename))
-
-
 
 def read_as_bw(filename, input_count):
     col = Image.open(filename)
@@ -61,7 +38,7 @@ def read_as_bw(filename, input_count):
 
     # Pixel range is 0...255, 256/2 = 128
     bw[bw < 128] = 0    # Black
-    bw[bw >= 128] = 1 # White
+    bw[bw >= 128] = 1   # White
 
     return np.resize(bw, input_count)
 
